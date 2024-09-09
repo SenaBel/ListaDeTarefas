@@ -40,27 +40,44 @@ function AddTasks({ setNewTask, setIsOpenModal }: IAddTasksProps) {
 
   return (
     <div className="p-6 space-y-4 bg-slate-200 rounded-md shadow flex flex-col">
-      <div className="flex ">
+      <div className="flex flex-col ">
         <input
           type="text"
           placeholder="Titulo da Tarefa"
-          className="border border-slate-300 outline-slate-400 px-4 py-2 rounded-md"
+          className={`border ${
+            titleError
+              ? "border-red-500 outline-red-500 focus:outline-0"
+              : "border-slate-300"
+          } outline-slate-400 px-4 py-2 rounded-md`}
           value={title}
-          onChange={(e) => settitle(e.target.value)}
+          onChange={(e) => {
+            settitle(e.target.value);
+            if (e.target.value.length > 1) setTitleError(null);
+          }}
         />
         {titleError && (
-          <span className="absolute text-red-500 text-sm mt-1">
-            {titleError}
-          </span>
+          <span className=" text-red-500 text-sm mt-1">{titleError}</span>
         )}
       </div>
-      <input
-        type="text"
-        placeholder="Descrição da tarefa"
-        className="border border-slate-300 outline-slate-400 px-4 py-2 rounded-md"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
+      <div className="flex flex-col ">
+        <input
+          type="text"
+          placeholder="Descrição da tarefa"
+          className={`border ${
+            descriptionError
+              ? "border-red-500 outline-red-500 focus:outline-0"
+              : "border-slate-300"
+          } outline-slate-400 px-4 py-2 rounded-md`}
+          value={description}
+          onChange={(e) => {
+            setDescription(e.target.value);
+            if (e.target.value.length > 0) setDescriptionError(null);
+          }}
+        />
+        {descriptionError && (
+          <span className=" text-red-500 text-sm mt-1">{descriptionError}</span>
+        )}
+      </div>
 
       <button
         onClick={onAddTask}

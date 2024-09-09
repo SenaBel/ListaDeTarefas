@@ -79,8 +79,8 @@ function App() {
           isOpen={isOpenModal}
           onClose={handleCancelAddTask}
           onConfirm={handleAddTask}
-          title="Confirmar Adição"
-          description="Você tem certeza que deseja adicionar esta tarefa?"
+          title="Confirmar Operação?"
+          description="Tem Certeza que Deseja Adicionar Tarefa?"
         />
       </div>
     </>

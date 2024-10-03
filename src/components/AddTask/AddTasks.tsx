@@ -1,16 +1,20 @@
-import { useState } from "react";
-import ITasks from "../interfaces/ITasks";
+import { useContext, useState } from "react";
 
-interface IAddTasksProps {
-  setNewTask: React.Dispatch<React.SetStateAction<ITasks | null>>;
-  setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { TaskContext } from "../../context/TaskContext";
 
-function AddTasks({ setNewTask, setIsOpenModal }: IAddTasksProps) {
+function AddTasks() {
+  const context = useContext(TaskContext);
+
   const [title, settitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [titleError, setTitleError] = useState<string | null>(null);
   const [descriptionError, setDescriptionError] = useState<string | null>(null);
+
+  if (!context) {
+    throw new Error("Contextos de tarefa ou notificação não encontrados");
+  }
+
+  const { addTask, setShouldFetch } = context;
 
   function onAddTask() {
     let hasError: boolean = false;
@@ -31,9 +35,10 @@ function AddTasks({ setNewTask, setIsOpenModal }: IAddTasksProps) {
 
     if (hasError) return;
 
-    setIsOpenModal(true);
-    setNewTask({ id: 0, title, description, isCompleted: false });
-    setIsOpenModal(true);
+    addTask({ id: 0, title, description, isCompleted: false });
+    // fetchTasks();
+    setShouldFetch(true);
+
     settitle("");
     setDescription("");
   }

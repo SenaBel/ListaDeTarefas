@@ -1,14 +1,12 @@
 import { Check, ChevronRightIcon, Trash2 } from "lucide-react";
-import ITasks from "../interfaces/ITasks";
+import useListTasks from "./useListTasks";
 
-interface ITasksProps {
-  tasks: ITasks[];
-  onChangeStatus: (id: number) => void;
-  onRemoveTask: (id: number) => void;
-}
+function ListTasks() {
+  const { tasks, isLoading, error, onChangeStatus, onRemoveTask } =
+    useListTasks();
 
-function Tasks({ tasks, onChangeStatus, onRemoveTask }: ITasksProps) {
-  console.log("tasks", tasks);
+  if (isLoading) return <p>Carregando tarefas...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <ul className=" space-y-4 p-6 bg-slate-200 rounded-md shadow">
@@ -42,4 +40,4 @@ function Tasks({ tasks, onChangeStatus, onRemoveTask }: ITasksProps) {
   );
 }
 
-export default Tasks;
+export default ListTasks;

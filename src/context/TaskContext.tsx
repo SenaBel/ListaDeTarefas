@@ -2,6 +2,11 @@ import React, { createContext, useState, useEffect } from "react";
 import ITasks from "../interfaces/ITasks";
 import TaskService from "../services/TaskService";
 
+interface INotification {
+  message: string;
+  type: "success" | "error" | "warning" | "info";
+}
+
 interface TaskContextType {
   tasks: ITasks[];
   addTask: (task: ITasks) => Promise<void>;
@@ -9,9 +14,12 @@ interface TaskContextType {
   updateTaskStatus: (id: number | undefined, isCompleted: boolean) => void;
   deleteTask: (id: number | undefined) => Promise<void>;
   buscar: boolean;
-
   shouldFetch: boolean;
   setShouldFetch: React.Dispatch<React.SetStateAction<boolean>>;
+  notification: INotification | null;
+  setNotification: (notification: INotification | null) => void;
+  openModal: boolean;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const TaskContext = createContext<TaskContextType | undefined>(
@@ -23,6 +31,9 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [tasks, setTasks] = useState<ITasks[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
+
+  const [notification, setNotification] = useState<INotification | null>(null);
+  const [openModal, setOpenModal] = useState(false);
 
   const fetchTasks = async () => {
     const fetchedTasks = await TaskService.getTasks();
@@ -47,13 +58,22 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
       .catch((error) => console.error("Erro ao atualizar tarefa:", error));
   };
 
-  const deleteTask = (id: number | undefined) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id)); // Atualiza o estado local
-
-    // Remove do servidor
-    TaskService.deleteTask(id)
-      .then(() => fetchTasks()) // Sincroniza com o servidor
-      .catch((error) => console.error("Erro ao remover a tarefa:", error));
+  const deleteTask = async (id: number | undefined): Promise<void> => {
+    try {
+      await TaskService.deleteTask(id);
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id)); // Atualiza o estado local
+      setNotification({
+        message: "Tarefa foi excluída com sucesso!",
+        type: "warning",
+      });
+      fetchTasks(); // Opcional: sincroniza o estado com o servidor
+    } catch (error) {
+      console.error("Erro ao remover a tarefa:", error);
+      setNotification({
+        message: "Erro ao excluir a tarefa, por favor verifique...",
+        type: "error",
+      });
+    }
   };
   useEffect(() => {
     fetchTasks();
@@ -70,6 +90,10 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
         deleteTask,
         shouldFetch,
         setShouldFetch,
+        notification,
+        setNotification,
+        openModal,
+        setOpenModal,
       }}
     >
       {children}

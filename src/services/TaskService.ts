@@ -16,7 +16,6 @@ class TaskService {
 
   async addTask(data: ITasks) {
     if (!data) return;
-    console.log("data no service", data);
     try {
       const response = await fetch(`${API_URL}/tasks`, {
         method: "POST",
@@ -47,7 +46,7 @@ class TaskService {
       if (!response.ok) {
         throw new Error(`Erro ao deletar a tarefa: ${response.status}`);
       }
-      return await response.json(); // Pode retornar um status ou confirmação
+      return await response.json();
     } catch (error) {
       console.error("Erro ao deletar a Tarefa:", error);
       throw error;
@@ -58,7 +57,7 @@ class TaskService {
     if (id === undefined || !taskData) return;
     try {
       const response = await fetch(`${API_URL}/tasks/${id}`, {
-        method: "PATCH", // Usamos PATCH para atualizar parcialmente
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -68,7 +67,7 @@ class TaskService {
       if (!response.ok) {
         throw new Error(`Erro ao atualizar a tarefa: ${response.status}`);
       }
-      return await response.json(); // Retorna a tarefa atualizada
+      return await response.json();
     } catch (error) {
       console.error("Erro ao atualizar a Tarefa:", error);
       throw error;

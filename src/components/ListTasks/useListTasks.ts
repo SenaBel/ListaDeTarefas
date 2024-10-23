@@ -19,14 +19,18 @@ function useListTasks() {
     setShouldFetch,
     updateTaskStatus,
     deleteTask,
+    notification,
+    setNotification,
+    openModal,
+    setOpenModal,
   } = context;
 
   useEffect(() => {
     const fetchAndSetTasks = async () => {
       try {
         setIsLoading(true);
-        await fetchTasks(); // Carrega as tarefas
-        setShouldFetch(false); // Define que não deve buscar novamente
+        await fetchTasks();
+        setShouldFetch(false);
       } catch (err) {
         setError("Failed to fetch tasks");
       } finally {
@@ -53,6 +57,10 @@ function useListTasks() {
     onRemoveTask: (id: number | undefined) => {
       deleteTask(id);
     },
+    notification,
+    setNotification,
+    openModal,
+    setOpenModal,
   };
 }
 

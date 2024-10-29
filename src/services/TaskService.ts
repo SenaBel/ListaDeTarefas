@@ -14,6 +14,23 @@ class TaskService {
     }
   }
 
+  async getTaskById(id: string | undefined) {
+    if (!id) return;
+    try {
+      const response = await fetch(`${API_URL}/getTasks/${id}`);
+
+      if (!response.ok) {
+        throw new Error(`Erro ao buscar a tarefa: ${response.status}`);
+      }
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error("Erro ao buscar a Tarefa pelo ID:", error);
+      throw error;
+    }
+  }
+
   async addTask(data: ITasks) {
     if (!data) return;
     try {
@@ -36,7 +53,7 @@ class TaskService {
     }
   }
 
-  async deleteTask(id: number | undefined) {
+  async deleteTask(id: string | undefined) {
     if (id === undefined) return;
     try {
       const response = await fetch(`${API_URL}/deleteTask/${id}`, {
@@ -53,7 +70,7 @@ class TaskService {
     }
   }
 
-  async updateTaskStatus(id: number | undefined, taskData: ITasks) {
+  async updateTaskStatus(id: string | undefined, taskData: ITasks) {
     if (id === undefined || !taskData) return;
     try {
       const response = await fetch(`${API_URL}/tasks/${id}`, {

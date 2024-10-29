@@ -11,8 +11,8 @@ interface TaskContextType {
   tasks: ITasks[];
   addTask: (task: ITasks) => Promise<void>;
   fetchTasks: () => Promise<void>;
-  updateTaskStatus: (id: number | undefined, isCompleted: boolean) => void;
-  deleteTask: (id: number | undefined) => Promise<void>;
+  updateTaskStatus: (id: string | undefined, isCompleted?: boolean) => void;
+  deleteTask: (id: string | undefined) => Promise<void>;
   buscar: boolean;
   shouldFetch: boolean;
   setShouldFetch: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,7 +45,7 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
     setShouldFetch(true);
   };
 
-  const updateTaskStatus = (id: number | undefined, isCompleted: boolean) => {
+  const updateTaskStatus = (id: string | undefined, isCompleted: boolean) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === id ? { ...task, isCompleted } : task
@@ -58,7 +58,7 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({
       .catch((error) => console.error("Erro ao atualizar tarefa:", error));
   };
 
-  const deleteTask = async (id: number | undefined): Promise<void> => {
+  const deleteTask = async (id: string | undefined): Promise<void> => {
     try {
       await TaskService.deleteTask(id);
       setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id)); // Atualiza o estado local

@@ -1,9 +1,11 @@
 import { useEffect, useState, useContext } from "react";
 
 import { TaskContext } from "../../context/TaskContext";
+import { useNavigate } from "react-router-dom";
 
 function useListTasks() {
   const context = useContext(TaskContext);
+  const navigate = useNavigate();
 
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +34,7 @@ function useListTasks() {
         await fetchTasks();
         setShouldFetch(false);
       } catch (err) {
-        setError("Failed to fetch tasks");
+        setError("Buscando Tarefas....");
       } finally {
         setIsLoading(false);
         setShouldFetch(false);
@@ -44,23 +46,30 @@ function useListTasks() {
     }
   }, [fetchTasks, shouldFetch, setShouldFetch]);
 
+  function onSeeDetailsClick(id: string | undefined) {
+    const queryParams = new URLSearchParams();
+    queryParams.set("id", id || "");
+    navigate(`/getTasks/${id}`);
+  }
+
   return {
     tasks,
     isLoading,
     error,
-    onChangeStatus: (id: number | undefined) => {
+    onChangeStatus: (id: string | undefined) => {
       const task = tasks.find((task) => task.id === id);
       if (task) {
         updateTaskStatus(id, !task.isCompleted);
       }
     },
-    onRemoveTask: (id: number | undefined) => {
+    onRemoveTask: (id: string | undefined) => {
       deleteTask(id);
     },
     notification,
     setNotification,
     openModal,
     setOpenModal,
+    onSeeDetailsClick,
   };
 }
 

@@ -36,7 +36,7 @@ function useListTasks() {
     if (hasError) return;
 
     try {
-      await addTask({ id: 0, title, description, isCompleted: false });
+      await addTask({ id: "", title, description, isCompleted: false });
       // Exibe notificação de sucesso
       setNotification({
         message: "Tarefa foi adicionada com sucesso!",

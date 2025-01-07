@@ -1,6 +1,6 @@
 import ITasks from "../interfaces/ITasks";
 
-const API_URL = "http://localhost:3333";
+const API_URL = import.meta.env.VITE_API_URL;
 
 class TaskService {
   async getTasks() {

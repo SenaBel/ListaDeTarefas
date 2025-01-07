@@ -18,11 +18,18 @@ export const Login = () => {
     if (email && password) {
       const isLogged = await auth.signin(email, password);
       console.log("teste>>>", isLogged);
+      console.log("EmailError>>>", emailError);
       if (isLogged) {
         navigate("/");
       } else {
         alert("Não deu certo.");
       }
+    }
+    if (!email) {
+      setEmailError("Digite seu e-mail.");
+    }
+    if (!password) {
+      setPasswordError("Digite sua senha.");
     }
   };
 
@@ -48,6 +55,11 @@ export const Login = () => {
                 if (e.target.value.length > 1) setEmailError(null);
               }}
             />
+            {passwordError && (
+              <span className=" text-red-500 text-sm mt-1">
+                {passwordError}
+              </span>
+            )}
           </div>
           <div className="flex flex-col ">
             <input

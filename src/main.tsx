@@ -8,11 +8,16 @@ import "./index.css";
 import DatailsTaskPage from "./pages/DatailsTaskPage.tsx";
 import { Login } from "./pages/Login/Login.tsx";
 import { AuthProvider } from "./contexts/Auth/AuthProvider.tsx";
+import { RequireAuth } from "./contexts/Auth/RequireAuth.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <RequireAuth>
+        <App />
+      </RequireAuth>
+    ),
   },
   {
     path: "/login",
@@ -20,7 +25,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/getTasks/:id",
-    element: <DatailsTaskPage />,
+    element: (
+      <RequireAuth>
+        <DatailsTaskPage />
+      </RequireAuth>
+    ),
   },
 ]);
 

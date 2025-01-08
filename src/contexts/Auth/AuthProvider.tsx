@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
 
   useEffect(() => {
     const validateToken = async () => {
-      const storageData = localStorage.getItem("authToken");
+      const storageData = localStorage.getItem("authToken") ?? "";
       if (storageData) {
         try {
           const data = await LoginService.validateToken(storageData);
@@ -30,10 +30,10 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     try {
       const user: IUser = { email, password };
       const data = await LoginService.signin(user);
-      console.log("data", data);
-      if (data) {
-        setUser(data.user);
-        setToken(data.token);
+      console.log("data..", data);
+      if (data.data?.user && data.data?.token) {
+        setUser(data.data.user);
+        setToken(data.data.token);
         return true;
       }
       return false;
@@ -45,13 +45,17 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
 
   const signout = async () => {
     console.log("signout está sendo executada.");
+    await LoginService.signout();
     setUser(null);
     setToken("");
-    await LoginService.signout();
   };
 
-  const setToken = (token: string) => {
-    localStorage.setItem("authToken", token);
+  const setToken = (token: string | null) => {
+    if (token) {
+      localStorage.setItem("authToken", token); // Salva o token apenas se não for null
+    } else {
+      localStorage.removeItem("authToken"); // Remove o token se for null
+    }
   };
 
   return (

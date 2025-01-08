@@ -4,8 +4,8 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 class LoginService {
   async signin(user: IUser) {
-    console.log("Chegou no service", user);
     if (!user) return;
+
     try {
       const response = await fetch(`${API_URL}/login`, {
         method: "POST",

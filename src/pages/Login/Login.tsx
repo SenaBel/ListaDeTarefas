@@ -55,10 +55,8 @@ export const Login = () => {
                 if (e.target.value.length > 1) setEmailError(null);
               }}
             />
-            {passwordError && (
-              <span className=" text-red-500 text-sm mt-1">
-                {passwordError}
-              </span>
+            {emailError && (
+              <span className=" text-red-500 text-sm mt-1">{emailError}</span>
             )}
           </div>
           <div className="flex flex-col ">

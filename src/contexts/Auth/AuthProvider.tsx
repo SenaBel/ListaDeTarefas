@@ -10,11 +10,12 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
 
   useEffect(() => {
     const validateToken = async () => {
-      const storageData = localStorage.getItem("authToken") ?? "";
+      const storageData = localStorage.getItem("authToken");
       if (storageData) {
         try {
           const data = await LoginService.validateToken(storageData);
-          if (data.user) {
+          console.log("Resposta do validateToken:>>>", data);
+          if (data?.user) {
             setUser(data.user);
           }
         } catch (error) {
@@ -44,19 +45,16 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
   };
 
   const signout = async () => {
-    console.log("signout está sendo executada.");
+    console.log("signout está sendo executadauuuuu");
     await LoginService.signout();
     setUser(null);
     setToken("");
   };
 
-  const setToken = (token: string | null) => {
-    if (token) {
-      localStorage.setItem("authToken", token); // Salva o token apenas se não for null
-    } else {
-      localStorage.removeItem("authToken"); // Remove o token se for null
-    }
-  };
+  const setToken = (token: string | null) =>
+    token
+      ? localStorage.setItem("authToken", token)
+      : localStorage.removeItem("authToken");
 
   return (
     <AuthContext.Provider value={{ user, signin, signout }}>

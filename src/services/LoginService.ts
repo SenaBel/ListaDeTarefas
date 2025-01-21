@@ -29,9 +29,8 @@ class LoginService {
   async validateToken(token: string) {
     try {
       const response = await fetch(`${API_URL}/validate-token`, {
-        method: "POST",
+        method: "GET",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
@@ -39,7 +38,9 @@ class LoginService {
       if (!response.ok) {
         throw new Error(`Erro: ${response.status}`);
       }
+
       const result = await response.json();
+      console.log("RESULT", result);
       return result;
     } catch (error) {
       console.error("Erro ao validar o token:", error);
@@ -52,14 +53,17 @@ class LoginService {
       const response = await fetch(`${API_URL}/signout`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
       if (!response.ok) {
         throw new Error(`Erro: ${response.status}`);
       }
-      return true;
+
+      localStorage.removeItem("token"); // Remova o token do armazenamento
+      //window.location.href = "/login";
     } catch (error) {
       console.error("Erro ao fazer logout:", error);
       throw error;

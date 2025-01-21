@@ -1,14 +1,15 @@
 import { useContext, useState } from "react";
 
 import { TaskContext } from "../../contexts/TaskContext";
+import ITasks from "../../interfaces/ITasks";
 
 function useListTasks() {
   const context = useContext(TaskContext);
 
-  const [title, settitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
   const [titleError, setTitleError] = useState<string | null>(null);
   const [descriptionError, setDescriptionError] = useState<string | null>(null);
+
+  const [formTask, setFormTask] = useState<ITasks>([] as unknown as ITasks);
 
   if (!context) {
     throw new Error("Contextos de tarefa ou notificação não encontrados");
@@ -16,8 +17,11 @@ function useListTasks() {
 
   const { addTask, setShouldFetch, notification, setNotification } = context;
 
-  async function onAddTask() {
+  async function onAddTask(formData: FormData, formElement: HTMLFormElement) {
     let hasError: boolean = false;
+
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
 
     if (!title) {
       setTitleError("Campo obrigatório");
@@ -36,14 +40,19 @@ function useListTasks() {
     if (hasError) return;
 
     try {
-      await addTask({ id: "", title, description, isCompleted: false });
+      await addTask({
+        id: "",
+        title,
+        description,
+        isCompleted: false,
+      });
       // Exibe notificação de sucesso
       setNotification({
         message: "Tarefa foi adicionada com sucesso!",
         type: "success",
       });
-      settitle("");
-      setDescription("");
+
+      formElement.reset();
     } catch (error) {
       // Exibe notificação de erro
       setNotification({
@@ -52,25 +61,17 @@ function useListTasks() {
       });
     }
     setShouldFetch(true);
-
-    // addTask({ id: 0, title, description, isCompleted: false });
-    // // fetchTasks();
-    // setShouldFetch(true);
-
-    // settitle("");
-    // setDescription("");
   }
 
   return {
     onAddTask,
-    title,
-    settitle,
+
     notification,
     setNotification,
     titleError,
     setTitleError,
-    description,
-    setDescription,
+    //description,
+    //setDescription,
     descriptionError,
     setDescriptionError,
   };

@@ -1,43 +1,44 @@
 import { useContext, useState } from "react";
 
 import { TaskContext } from "../../contexts/TaskContext";
-import ITasks from "../../interfaces/ITasks";
+import validarCampo from "../../hooks/validarCampo";
 
 function useListTasks() {
-  const context = useContext(TaskContext);
+  const contextOfTask = useContext(TaskContext);
 
   const [titleError, setTitleError] = useState<string | null>(null);
   const [descriptionError, setDescriptionError] = useState<string | null>(null);
 
-  const [formTask, setFormTask] = useState<ITasks>([] as unknown as ITasks);
-
-  if (!context) {
+  if (!contextOfTask) {
     throw new Error("Contextos de tarefa ou notificação não encontrados");
   }
 
-  const { addTask, setShouldFetch, notification, setNotification } = context;
+  const { addTask, setShouldFetch, notification, setNotification } =
+    contextOfTask;
 
-  async function onAddTask(formData: FormData, formElement: HTMLFormElement) {
-    let hasError: boolean = false;
-
+  function validarTask(formData: FormData): boolean {
     const title = formData.get("title") as string;
     const description = formData.get("description") as string;
 
-    if (!title) {
-      setTitleError("Campo obrigatório");
-      hasError = true;
-    } else {
-      setTitleError(null);
-    }
+    const isTitleValid = validarCampo(
+      title,
+      setTitleError,
+      "Campo obrigatório"
+    );
 
-    if (!description) {
-      setDescriptionError("Campo obrigatório");
-      hasError = true;
-    } else {
-      setDescriptionError(null);
-    }
+    const isDescriptionValid = validarCampo(
+      description,
+      setDescriptionError,
+      "Campo obrigatório"
+    );
+    return isTitleValid && isDescriptionValid;
+  }
 
-    if (hasError) return;
+  async function onAddTask(formData: FormData, formElement: HTMLFormElement) {
+    if (!validarTask(formData)) return;
+
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
 
     try {
       await addTask({
@@ -63,15 +64,18 @@ function useListTasks() {
     setShouldFetch(true);
   }
 
-  return {
-    onAddTask,
+  function handleSumit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formElement = e.target as HTMLFormElement;
+    onAddTask(new FormData(e.target as HTMLFormElement), formElement);
+  }
 
+  return {
+    handleSumit,
     notification,
     setNotification,
     titleError,
     setTitleError,
-    //description,
-    //setDescription,
     descriptionError,
     setDescriptionError,
   };

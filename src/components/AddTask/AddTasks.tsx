@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 
 function AddTasks() {
   const {
-    onAddTask,
+    handleSumit,
     titleError,
     descriptionError,
     setDescriptionError,
@@ -16,9 +16,7 @@ function AddTasks() {
   return (
     <form
       onSubmit={(e) => {
-        e.preventDefault();
-        const formElement = e.target as HTMLFormElement;
-        onAddTask(new FormData(e.target as HTMLFormElement), formElement);
+        handleSumit(e);
       }}
     >
       <div className="p-6 space-y-4 bg-slate-200 rounded-md shadow flex flex-col">
@@ -31,7 +29,6 @@ function AddTasks() {
                 ? "border-red-500 outline-red-500 focus:outline-0"
                 : "border-slate-300"
             } outline-slate-400 px-4 py-2 rounded-md`}
-            ///value={title}
             name="title"
             onInput={(e) => {
               if ((e.target as HTMLFormElement).value.length > 0)
@@ -53,7 +50,6 @@ function AddTasks() {
                 ? "border-red-500 outline-red-500 focus:outline-0"
                 : "border-slate-300"
             } outline-slate-400 px-4 py-2 rounded-md`}
-            //value={description}
             name="description"
             onInput={(e) => {
               if ((e.target as HTMLFormElement).value.length > 0)

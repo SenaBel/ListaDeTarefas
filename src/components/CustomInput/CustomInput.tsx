@@ -1,0 +1,37 @@
+interface CustomInputProps {
+  type?: string;
+  placeholder?: string;
+  className?: string;
+  name: string;
+  value?: string;
+  error?: string | null;
+  onInput?: (e: React.FormEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export const CustomInput: React.FC<CustomInputProps> = ({
+  type = "text",
+  placeholder = "",
+  className = "",
+  name,
+  value,
+  error,
+  onInput,
+  onChange,
+}) => {
+  return (
+    <input
+      type={type}
+      placeholder={placeholder}
+      className={`border px-4 py-2 rounded-md ${
+        error
+          ? "border-red-500 outline-red-500 focus:outline-0"
+          : "border-slate-300 focus:outline-slate-400"
+      } ${className}`}
+      name={name}
+      value={value}
+      onInput={onInput}
+      onChange={onChange}
+    />
+  );
+};

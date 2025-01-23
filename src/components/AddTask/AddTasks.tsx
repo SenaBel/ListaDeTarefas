@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import useAddTask from "../AddTask/useAddTask";
 import { CustomInput } from "../CustomInput/CustomInput";
 import NotificationTask from "../Notification/NotificationTask";
@@ -14,6 +15,7 @@ function AddTasks() {
     setNotification,
   } = useAddTask();
 
+  const inputDescriptionTask = useRef<HTMLInputElement>(null);
   return (
     <form
       onSubmit={(e) => {
@@ -31,6 +33,7 @@ function AddTasks() {
               if ((e.target as HTMLFormElement).value.length > 0)
                 setTitleError(null);
             }}
+            onPressEnter={() => inputDescriptionTask.current?.focus()}
           />
 
           {titleError && (
@@ -44,6 +47,7 @@ function AddTasks() {
             type={"text"}
             placeholder={"Descrição da Tarefa"}
             error={descriptionError}
+            ref={inputDescriptionTask}
             onInput={(e) => {
               if ((e.target as HTMLFormElement).value.length > 0)
                 setDescriptionError(null);

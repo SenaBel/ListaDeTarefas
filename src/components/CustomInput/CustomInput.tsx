@@ -1,4 +1,6 @@
-interface CustomInputProps {
+import React from "react";
+
+interface ICustomInputProps {
   type?: string;
   placeholder?: string;
   className?: string;
@@ -7,20 +9,29 @@ interface CustomInputProps {
   error?: string | null;
   onInput?: (e: React.FormEvent<HTMLInputElement>) => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onPressEnter?: () => void;
 }
 
-export const CustomInput: React.FC<CustomInputProps> = ({
-  type = "text",
-  placeholder = "",
-  className = "",
-  name,
-  value,
-  error,
-  onInput,
-  onChange,
-}) => {
-  return (
+export const CustomInput = React.forwardRef<
+  HTMLInputElement,
+  ICustomInputProps
+>(
+  (
+    {
+      type,
+      placeholder,
+      className,
+      name,
+      value,
+      error,
+      onInput,
+      onChange,
+      onPressEnter,
+    },
+    ref
+  ) => (
     <input
+      ref={ref}
       type={type}
       placeholder={placeholder}
       className={`border px-4 py-2 rounded-md ${
@@ -32,6 +43,9 @@ export const CustomInput: React.FC<CustomInputProps> = ({
       value={value}
       onInput={onInput}
       onChange={onChange}
+      onKeyDown={(e) =>
+        e.key === "Enter" ? onPressEnter && onPressEnter() : undefined
+      }
     />
-  );
-};
+  )
+);

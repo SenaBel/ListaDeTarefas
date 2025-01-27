@@ -1,8 +1,9 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 
 import { LogIn, User, Lock } from "lucide-react";
 import { AuthContext } from "../../contexts/Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { CustomInput } from "../../components/CustomInput/CustomInput";
 
 export const Login = () => {
   //const context = useContext(TaskContext);
@@ -13,6 +14,8 @@ export const Login = () => {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const inputPassword = useRef<HTMLInputElement>(null);
+  const loginButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleLogin = async () => {
     if (email && password) {
@@ -43,7 +46,24 @@ export const Login = () => {
           <div className="flex flex-col ">
             <div className="flex items-center gap-2">
               <User className="text-slate-700" />
-              <input
+              <CustomInput
+                name="email"
+                type="text"
+                placeholder="Digite seu e-mail..."
+                error={emailError}
+                className={`flex-grow border ${
+                  emailError
+                    ? "border-red-500 outline-red-500 focus:outline-0"
+                    : "border-slate-300"
+                } outline-slate-400 px-4 py-2 rounded-md`}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (e.target.value.length > 0) setEmailError(null);
+                }}
+                onPressEnter={() => inputPassword.current?.focus()}
+              />
+
+              {/* <input
                 type="text"
                 placeholder="Digite seu e-mail..."
                 className={`flex-grow border ${
@@ -57,6 +77,11 @@ export const Login = () => {
                   if (e.target.value.length > 1) setEmailError(null);
                 }}
               />
+            {emailError && (
+              <span className=" text-red-500 text-sm mt-1 ml-8">
+                {emailError}
+              </span>
+            )} */}
             </div>
             {emailError && (
               <span className=" text-red-500 text-sm mt-1 ml-8">
@@ -68,7 +93,25 @@ export const Login = () => {
             <div className="flex items-center gap-2">
               <Lock className="text-slate-700" />
 
-              <input
+              <CustomInput
+                name="password"
+                type="password"
+                placeholder="Digite sua senha..."
+                error={passwordError}
+                ref={inputPassword}
+                className={`flex-grow border ${
+                  passwordError
+                    ? "border-red-500 outline-red-500 focus:outline-0"
+                    : "border-slate-300"
+                } outline-slate-400 px-4 py-2 rounded-md`}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (e.target.value.length > 0) setPasswordError(null);
+                }}
+                onPressEnter={() => loginButtonRef.current?.focus()}
+              />
+
+              {/* <input
                 type="password"
                 placeholder="Digite sua senha..."
                 className={`flex-grow border ${
@@ -81,7 +124,7 @@ export const Login = () => {
                   setPassword(e.target.value);
                   if (e.target.value.length > 0) setPasswordError(null);
                 }}
-              />
+              /> */}
             </div>
             {passwordError && (
               <span className=" text-red-500 text-sm mt-1 ml-8">
@@ -91,6 +134,7 @@ export const Login = () => {
           </div>
 
           <button
+            ref={loginButtonRef}
             onClick={() => handleLogin()}
             className="
       bg-slate-500 text-violet-50 px-4 py-2 

@@ -62,26 +62,6 @@ export const Login = () => {
                 }}
                 onPressEnter={() => inputPassword.current?.focus()}
               />
-
-              {/* <input
-                type="text"
-                placeholder="Digite seu e-mail..."
-                className={`flex-grow border ${
-                  emailError
-                    ? "border-red-500 outline-red-500 focus:outline-0"
-                    : "border-slate-300"
-                } outline-slate-400 px-4 py-2 rounded-md`}
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  if (e.target.value.length > 1) setEmailError(null);
-                }}
-              />
-            {emailError && (
-              <span className=" text-red-500 text-sm mt-1 ml-8">
-                {emailError}
-              </span>
-            )} */}
             </div>
             {emailError && (
               <span className=" text-red-500 text-sm mt-1 ml-8">
@@ -110,21 +90,6 @@ export const Login = () => {
                 }}
                 onPressEnter={() => loginButtonRef.current?.focus()}
               />
-
-              {/* <input
-                type="password"
-                placeholder="Digite sua senha..."
-                className={`flex-grow border ${
-                  passwordError
-                    ? "border-red-500 outline-red-500 focus:outline-0"
-                    : "border-slate-300"
-                } outline-slate-400 px-4 py-2 rounded-md`}
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  if (e.target.value.length > 0) setPasswordError(null);
-                }}
-              /> */}
             </div>
             {passwordError && (
               <span className=" text-red-500 text-sm mt-1 ml-8">

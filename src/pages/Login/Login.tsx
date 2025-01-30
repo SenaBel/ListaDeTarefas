@@ -4,6 +4,7 @@ import { LogIn, User, Lock } from "lucide-react";
 import { AuthContext } from "../../contexts/Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { CustomInput } from "../../components/CustomInput/CustomInput";
+import Button from "../../components/Button/Button";
 
 export const Login = () => {
   //const context = useContext(TaskContext);
@@ -98,7 +99,7 @@ export const Login = () => {
             )}
           </div>
 
-          <button
+          {/* <button
             ref={loginButtonRef}
             onClick={() => handleLogin()}
             className="
@@ -107,7 +108,18 @@ export const Login = () => {
           >
             <LogIn className="size-4" />
             Fazer Login
-          </button>
+          </button> */}
+          <Button
+            className="
+                   bg-slate-500 text-violet-50 px-4 py-2 
+                    rounded-md font-medium flex justify-center 
+                    items-center gap-2 hover:bg-slate-600
+                    "
+            onClick={() => handleLogin()}
+          >
+            <LogIn className="size-4" />
+            Fazer Login
+          </Button>
         </div>
       </div>
     </div>
